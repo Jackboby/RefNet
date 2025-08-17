@@ -323,7 +323,71 @@
             <a href="https://biblehub.com/crossref/genesis/1-1.htm" target="_blank" class="block hover:underline text-gray-500">BibleHub Cross References + Outlines: BibleHub.com</a>
         </div>
     </footer>
+<style>
+  .popup-message {
+    position: absolute;
+    background: #3a81f5;
+    border: 8px solid transparent;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-family: 'Fira Sans', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    color: #fffff;
+    z-index: 999999; /* always on top */
+    pointer-events: none; /* doesn’t block clicks */
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
 
+  /* Active (come up) */
+  .popup-show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Going away (go down) */
+  .popup-hide {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+</style>
+<div id="popup" class="popup-message animated-border" style="color: #ffffff;">
+<p>Hey! Inputting a <span style="text-decoration: underline;"><em><strong>non-verse specific Bible parse</strong></em></span>, like <strong>"Romans 6"</strong>, will <em>only</em> load the <span style="text-decoration: underline;"><em>"LSB Reader Panel"</em></span>, and the <span style="text-decoration: underline;"><em>"ESV Audio Bible Iframe"</em></span>.<br><br>Inputting <span style="text-decoration: underline;"><em><strong>a verse specific Bible parse</strong></em></span>, like <strong>"Romans 6:23"</strong>, will <em>only</em> load the <strong>2 BibleHub panels</strong> ( <span style="text-decoration: underline;"><em>Context</em></span>, <span style="text-decoration: underline;"><em>Cross-Ref</em></span>).</p>
+</div>
+<script>
+  const input = document.getElementById('verse-input');
+  const popup = document.getElementById('popup');
+  let shown = false;
+
+  input.addEventListener('click', () => {
+    if (!shown) {
+      const rect = input.getBoundingClientRect();
+      popup.style.left = rect.left + window.scrollX + "px";
+      popup.style.top = rect.bottom + window.scrollY + 8 + "px";
+
+      // Show popup with animation
+      popup.classList.add('popup-show');
+      popup.style.display = "block";
+
+      shown = true;
+
+      // Hide with animation after 3s
+      setTimeout(() => {
+        popup.classList.remove('popup-show');
+        popup.classList.add('popup-hide');
+
+        // After transition ends, fully hide
+        popup.addEventListener('transitionend', () => {
+          popup.style.display = "none";
+          popup.classList.remove('popup-hide');
+        }, { once: true });
+
+      }, 7000);
+    }
+  });
+</script>
     <script>
         // The core JavaScript for our application
         document.addEventListener('DOMContentLoaded', () => {
